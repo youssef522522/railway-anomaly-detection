@@ -41,7 +41,7 @@ trained to identify every possible obstacle and is not suitable for safety-criti
 In Windows PowerShell, clone this repository and install the Python packages:
 
 ```powershell
-git clone https://github.com/ethz-asl/railway-anomaly-detection.git
+git clone https://github.com/youssef522522/railway-anomaly-detection.git
 cd railway-anomaly-detection
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
