@@ -64,6 +64,44 @@ cd railway-anomaly-detection/patch_classification
 python real_world_masking --threshold 0.9 --data_path /path/to/dataset_raw/directory # you can use --visualize 1 to enable visualizations (stored in output directory)
 ```
 
+## Run the model on a webcam
+
+### Quick test: generic object detector (no training required)
+
+To try common object detection with a PC webcam, run the lightweight pretrained COCO detector. From the
+repository root:
+
+```
+python patch_classification/object_detector_webcam.py --camera 0
+```
+
+It downloads the detector weights (about 13 MB) the first time it runs; after that, they are cached locally.
+The red boxes show recognized COCO objects, and the status text says whether any object was
+detected. Press `q` or Esc to quit. Use `--camera 1` if your webcam has a different index,
+`--confidence 0.75` to filter out lower-confidence detections, or `--device cuda` if you have
+a CUDA-enabled PyTorch installation. While it is running, press `c` to switch to the next
+available camera, or press a number key (`0`-`9`) to select that camera index directly. This
+detects familiar object categories, not every possible obstacle, and is only a general-purpose demo.
+
+### Railway model
+
+The webcam demo runs the DeepLabV3 baseline on live frames. It expects the trained checkpoint
+`trained_models/deeplabv3_model_5.pth` (or a compatible checkpoint supplied with `--checkpoint`).
+Model weights are not included in this repository checkout. See the DeepLabV3 training section
+below for how to train a checkpoint, or copy in the checkpoint you already have.
+
+From the `patch_classification` directory, with the project dependencies installed, run:
+
+```
+python webcam_demo.py --checkpoint ./trained_models/deeplabv3_model_5.pth --camera 0
+```
+
+Press `q` or Esc to close the window. Red pixels are potential anomalies; adjust the threshold
+with `--threshold` (the default is `0.3`). Use `--device cuda` if you have a CUDA-enabled PyTorch
+installation. Frames are resized to 224x224 to match the existing real-world evaluation pipeline.
+This is a demo, not a safety system; results may be unreliable with a standard webcam or a view
+that differs from the railway imagery used to train the model.
+
 
 
 ## Evaluate on Real-World dataset

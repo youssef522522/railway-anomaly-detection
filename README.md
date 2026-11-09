@@ -31,3 +31,35 @@ The anomaly detection pipeline is described in the following publication:
 In order to **re-generate the datasets**, have a look at the dataset_generation directory.
 
 In order to **train or evaluate** any of our patch-wise classification / semantic difference models, have a look at the patch_classification directory.
+
+## Quick start: webcam object detector
+
+This quick demo uses a pretrained, general-purpose COCO object detector. It does not require
+training or the railway-model checkpoints. It recognizes common object categories; it is not
+trained to identify every possible obstacle and is not suitable for safety-critical use.
+
+In Windows PowerShell, clone this repository and install the Python packages:
+
+```powershell
+git clone https://github.com/ethz-asl/railway-anomaly-detection.git
+cd railway-anomaly-detection
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install torch torchvision opencv-python
+```
+
+For GPU acceleration, install the PyTorch and torchvision builds appropriate for your CUDA
+version using the [PyTorch install selector](https://pytorch.org/get-started/locally/) instead.
+Then run the detector:
+
+```powershell
+python patch_classification\object_detector_webcam.py --camera 0
+```
+
+The pretrained detector weights (about 13 MB) download automatically on the first run and are
+cached for later runs. If the webcam does not open, try another index, such as `--camera 1`, and
+check Windows camera privacy permissions. While the window is open, press `c` to switch to the
+next available camera, `0`-`9` to select an index, or `q`/Esc to quit. Use `--confidence 0.75` to
+filter lower-confidence detections. See the [webcam detector instructions](patch_classification/README.md#quick-test-generic-object-detector-no-training-required)
+for more details.
